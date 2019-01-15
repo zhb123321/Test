@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>购物车 - 熊大书城</title>
+
+<link href="style/blue/main.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+table {
+	border: 1px solid #dddddd;
+	border-collapse: collapse;
+	width: 99%;
+	margin: auto;
+}
+
+td {
+	border: 1px solid #dddddd;
+}
+
+#consignee_addr {
+	width: 450px;
+}
+</style>
+</head>
+<body>
+
+	<div class="block clearfix" style="position: relative; height: 98px;">
+		<a href="#" name="top"><img class="logo"
+			src="style/blue/images/logo_max.png" /></a>
+		<div id="topNav" class="clearfix">
+				<div style="float: left;">
+					<div id="append_parent"></div>
+					<font id="ECS_MEMBERZONE"> <font class="f4_b">${user.loginname}</font>,
+						欢迎您回来！ <a href="#">用户中心</a> <a href="/removeSession.action">退出</a>
+					</font>
+				</div>
+				<div style="float: left;">
+					<div id="append_parent"></div>
+					<font id="ECS_MEMBERZONE"> 欢迎光临本店&nbsp; <a href="login.jsp">
+							登录</a> <a href="add.jsp">注册</a>
+					</font>
+				</div>
+			<div style="float: right;">
+				<a href="/querycart.action">查看购物车</a>
+			</div>
+		</div>
+
+		<div id="mainNav" class="clearfix">
+			<a href="#" class="cur">全部分类<span></span></a> <a href="#">JavaSE分类<span></span></a>
+			<a href="#">JavaEE分类<span></span></a> <a href="#">JavaScript分类<span></span></a>
+		</div>
+	</div>
+
+
+	<div class="header_bg">
+
+		<div
+			style="float: left; font-size: 14px; color: white; padding-left: 15px;">
+		</div>
+
+		<form id="searchForm" method="get" action="#">
+			<input name="keywords" id="keyword" type="text" /> <input
+				name="imageField" value=" " class="go"
+				style="cursor: pointer; background: url('style/blue/images/sousuo.gif') no-repeat scroll 0% 0% transparent; width: 39px; height: 20px; border: medium none; float: left; margin-right: 15px; vertical-align: middle;"
+				type="submit" />
+		</form>
+	</div>
+	<div class="blank"></div>
+	<div class="block">
+		<div class="flowBox">
+			<h6>
+				<span>商品列表</span>
+			</h6>
+			<form id="formCart">
+				<table cellpadding="5" cellspacing="1">
+					<tbody>
+						<tr>
+							<th>商品名称</th>
+							<th>本店价</th>
+							<th>购买数量</th>
+							<th>小计</th>
+							<th>操作</th>
+						</tr>
+						<tr>
+							<td align="center"><a href="#" target="_blank"><img
+									style="width: 80px; height: 80px;"
+									src="style/blue/images/${cart.image_b }" title="${book.bname }" /></a><br />
+								<a href="detail.action?bid=${cart.bid }" target="_blank" class="f6">${book.bname }</a></td>
+							<td align="right">￥${cart.price }元</td>
+							<td align="right"><input name="goods_number[43]"
+								id="goods_number_43" value="${cart.quantity}" size="4" class="inputBg"
+								style="text-align: center;" onkeydown="showdiv(this)"
+								type="text" />
+								<input type="hidden" id="bookNum" value="${book.stock}" /></td>
+							<td align="right" >￥<span class='countOne'>${cart.quantity*cart.price}</span>元</td>
+							<td align="center"><a href="/delete.action" class="f6">删除</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<table cellpadding="5" cellspacing="1">
+					<tbody>
+						<tr>
+							<td >总计:￥<span id="sum"></span>元</td>
+							<td align="right"><input value="清空购物车" class="bnt_blue_1"
+								type="button" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<input name="step" value="update_cart" type="hidden" />
+			</form>
+			<table cellpadding="5" cellspacing="0" width="99%">
+				<tbody>
+					<tr>
+						<td><a href="/index.action"><img src="style/blue/images/continue.gif"
+								alt="continue" /></a></td>
+						<td align="right"><a href="#"><img
+								src="style/blue/images/checkout.gif" alt="checkout" /></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="blank"></div>
+		<div class="blank5"></div>
+	</div>
+	<div class="blank"></div>
+	<iframe src="footer.jsp" frameborder="0" scrolling="no" width="100%"
+		height="300"></iframe>
+</html>

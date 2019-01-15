@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zl.demo.mapper.UserMapper">
+	<select id="login" resultType="User">
+		select * from tb_user
+	</select>
+<!-- 登录 -->
+	<select id="queryByNameAndPw" resultType="User">
+		select uid , loginname ,loginpass ,email , nickname ,tellphone ,
+		gender
+		from tb_user where loginname=#{0} and loginpass=#{1}
+		<!-- 0,1的顺序方式不能用来嵌套 <where> <if test="loginname!=null and loginname!=''"> 
+			and </if> <if test="loginpass!=null and loginpass!=''"> </if> </where> -->
+	</select>
+<!-- 注册 -->	
+	<insert id="add" parameterType="User">
+		insert into tb_user( loginname
+		,loginpass ,email , nickname ,tellphone , gender )
+		values(#{loginname},#{loginpass},#{email},#{nickname},#{tellphone},#{gender})
+	</insert>
+	
+	
+
+</mapper>

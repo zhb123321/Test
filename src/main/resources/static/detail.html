@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="Description" content="" />
+
+<title>Spring 3.0就这么简单 -- 熊大书城</title>
+
+<link href="style/blue/main.css" rel="stylesheet" type="text/css" />
+<!--axios.js  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+<script src="http://localhost:8070/js/getUrlParam.js"></script>
+
+</head>
+<body style="cursor: auto;">
+<div id="test"  style="align-content: center;">
+		<div >
+			<div style="float: left;">
+				<font >
+					<font id="ECS_MEMBERZONE"> <font class="f4_b"></font>,
+						欢迎您回来！ <a href="#">用户中心</a> <a href="/removeSession.action">退出</a>
+					</font>
+				</font>
+				<font >
+					<font id="ECS_MEMBERZONE"> 欢迎光临本店&nbsp; <a href="login.jsp">
+							登录</a> <a href="add.jsp">注册</a>
+					</font>
+				</font>
+			</div>
+			<div style="float: right;">
+				<a href="/querycart.action">查看购物车</a>
+			</div>
+		</div>
+		<div style="align-content: center;">
+				<div style="align-content: center;">
+					<img id="sim806035" :src="'style/blue/images/'+book.image_w"
+						:alt="book.bname" height="310px" width="310px;" />
+				</div>
+					<form action="javascript:addToCart(9)" method="post"
+						name="ECS_FORMBUY" id="ECS_FORMBUY">
+						<div class="clearfix"
+							style="font-size: 14px; font-weight: bold; padding-bottom: 8px;">
+							{{book.bname}}
+						</div>
+									<strong>商品货号：</strong> {{book.book_no}}
+									<strong>商品库存：</strong> {{book.stock}} 本
+									<strong>商品重量：</strong>{{book.weight}} 克
+								上架时间：
+									<strong>本店售价：</strong><font class="shop" id="ECS_SHOPPRICE">￥{{book.currPrice}}元</font><br />
+									<strong>用户评价：</strong> <img src="style/blue/images/stars0.gif"
+										alt="comment rank 5" id="img" onclick="change()">
+									<strong>购买数量：</strong> <input name="number" id="number"
+										value="1" size="2" type="text" />
+								<img id="run" src="style/blue/images/goumai2.gif" style="cursor: pointer"> 
+								<a href="#"><img src="style/blue/images/shoucang2.gif" onclick="run()"></a>
+					</form>
+			</div>
+</div>
+</body>
+
+<script src="http://localhost:8070/js/detail.js"></script>
+</html>

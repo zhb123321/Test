@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+</head>
+<body>
+		<div id="box">
+		<input type="button" @click="get()" value="获取数据(get)">			
+		 <h3>对象:{{user.loginname}}	</h3><!-- 对象 -->
+		 <input type="text" v-model="id"/> 		<!-- 拿字符串 -->
+		
+		<!-- <table>					
+			<tr v-for="site in sites">
+				<td>{{ site.username }}</td>
+				<td>{{site.id}}</td>
+			</tr>
+		</table> -->			<!-- 遍历集合 -->
+	</div>
+	
+	<!-- 拿字符串 -->
+	<script type="text/javascript">
+			var va = new Vue({
+			    el:'#box',
+			    data:{
+			        id:{},
+			        VueData:{} ,
+			        user:{}
+			    },
+			    methods:{
+			        get:function(){
+			            //发送get请求
+			            this.$http.get('http://localhost:8070/index.action').then(function(res){
+			            	this.VueData=res.data
+			            	this.user=res.data.user
+			            	alert(this.VueData)
+			            	console.log(res.bodyText);
+			            },function(){
+			                console.log('请求失败处理');
+			            });
+			        }
+			    }
+			});
+	</script>
+	
+	<!-- 拿对象 -->
+	<!-- <script type="text/javascript">			
+		var vm = new Vue({
+		    el:'#box',
+		    data:{
+		        msg:'Hello World!',
+		        VueData:{},
+		    },
+		    methods:{
+		        get:function(){
+		            //发送get请求
+		            this.$http.get('http://localhost:8080/vue.action').then(function(res){
+		                this.VueData = res.data;   
+		            },function(){
+		                console.log('请求失败处理');
+		            });
+		        }
+		    }
+		});
+		
+		
+	</script> -->
+	
+	
+	<!-- 拿集合对象 -->
+	<!-- <script type="text/javascript">
+		new Vue({
+			el:"#box",
+			data:{
+				msg:'hello vue!',
+				hello:'',
+				pageData:{},
+				sites:[]
+			},
+			methods:{
+				get:function(){
+					//发送get请求
+					this.$http.get("http://localhost:8080/get.action").then(function(res){
+		                this.pageData=res.data;
+		                this.sites = this.pageData.datas;
+		                
+		            },function(){
+		                console.log('请求失败处理');
+		            });
+				}
+			},
+			created:function() {			加载页面时表示直接调用方法进入后台
+				this.get();
+			}		
+		})
+	</script> -->
+</body>
+</html>

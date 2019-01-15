@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zl.demo.mapper.BookMapper">
+<!-- 分页 -->
+	<select id="queryData" resultType="Book" parameterType="Query">
+		SELECT b.*,c.cname FROM tb_book b  JOIN tb_category c ON c.cid = b.cid <include refid="wheresql"/>
+		ORDER BY price ${order}  LIMIT #{pageState},#{pageEnd}
+	</select>
+<!--总记录数  -->	
+	<select id="queryCount" resultType="int" parameterType="Query">
+		SELECT COUNT(*) FROM tb_book b <include refid="wheresql"/>
+	</select>
+	
+	<select id="queryBookById" resultType="Book">
+		SELECT * FROM tb_book b where b.bid=#{bid}
+	</select>
+	
+<!-- 购物车 -->
+	<insert id="addByBookId" parameterType="Cartitem">
+		 insert into tb_cartitem(quantity,bid,uid,price,image_b) values(#{quantity},#{bid},#{uid},#{price},#{image_b})
+	</insert>
+	
+	<select id="queryCart" resultType="Cartitem">
+		SELECT cartItemId,quantity,bid, uid , price , image_b FROM tb_cartitem where tb_cartitem.uid=#{uid}
+	</select>
+	
+	<select id="queryCartByBid" resultType="Cartitem">
+		SELECT cartItemId,quantity,bid, uid , price , image_b FROM tb_cartitem 
+		 where tb_cartitem.bid=#{bid}
+	</select>
+	
+	<update id="updateCart" parameterType="Cartitem">
+		update tb_cartitem set quantity=#{quantity} where bid=#{bid}
+	</update>
+	
+	<delete id="deleteByBookId" >
+		delete from tb_book where bid=#{bid}
+	</delete>
+
+
+
+	
+	<sql id="wheresql">
+		<where>
+			<if test="condition!=null and condition!=''">
+				and	author like '%${condition}%' or bname like '%${condition}%'
+			</if>
+			<if test="cid!=null and cid!=''">
+				and	trim(b.cid)=trim(#{cid})
+			</if>
+		</where>
+	</sql>
+
+</mapper>

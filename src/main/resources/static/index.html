@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>熊大网上书城</title>
+<script src="http://localhost:8070/script/jquery-1.8.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+<script src="http://localhost:8070/js/getUrlParam.js"></script>
+<script type="text/javascript">
+	$(function(){
+	    //给全选的复选框添加事件
+	    $("#checkAll").click(function(){
+	         // this 全选的复选框
+	    var bookIds=this.checked;
+	         //获取name=box的复选框 遍历输出复选框
+	       $("input[class=bids]").each(function(){
+	            this.checked=bookIds;
+	        });
+	     });
+	    
+		//跳转到多少页
+		$("#jump").click(function () {
+			var regexp = /^[1-9]\d*$/; //验证不能是正整数以外的其他符号
+			var pageNum= $("#pageNum").val();
+			var totalPage=$("#pageMax").val();
+			if (!regexp.test(pageNum)) { //如果为其他符号 pageIndex为1
+				$("#pageNum").val(1)     
+			}else if (parseInt(pageNum)>parseInt(totalPage)) {
+				alert("页码超出范围!")
+				
+			}else {
+				sendData(pageNum)
+			}
+		})
+//页容量
+		$("#pageSize").change(function () {
+			var regexp = /^[1-9]\d*$/; //验证不能是正整数以外的其他符号
+			var pageSize= $("#pageSize").val();
+			if (!regexp.test(pageSize)) {
+				$("#pageSize").val(2)    
+			}
+			sendData(1)
+		})
+		
+//批量删除		
+	$("#delMore").click(function () {
+			var arrId = [];//创建一个数组保存多个值
+			 $("input[name=ids]:checked").each(function(){
+				 arrId.push($(this).val());
+			 })
+			 alert(arrId)
+			if (arrId.length==0) {
+				alert("请选择需要删除的数据")
+			}else{
+			var isDel=confirm('是否删除');
+			if (isDel) {
+				//var UIdIndex= $.inArray("${user.id}",arrId);
+				var UIdIndex=arrId.indexOf("{{book.bid}}") //判断数组中是否存在当前用户的id
+				if (UIdIndex>-1) {         //如果存在就
+					alert('不能删除自己!')
+					arrId.splice(UIdIndex,1);  //将此id从数组中删除
+					location.href="http://localhost:8070/delMore.action?bids="+arrId
+				}else{
+					alert(arrId)
+					location.href="http://localhost:8070/delMore.action?bids="+arrId
+					}
+				}
+			}
+		})
+	    
+});
+
+//发送数据到后台
+function sendData(pageNum) {
+	var pageSize= $("#pageSize").val(); //页容量
+	var nickname= $("#nickname").val(); //昵称
+	var deptNo= $("#deptNo").val();   //部门Id
+	var stateAge= $("#start").val(); //时间
+	var endAge= $("#end").val();
+	window.location.href="${pageContext.request.contextPath }/emp/index.action?pageIndex="+pageNum+"&pageSize="+pageSize
+					+"&nicheng="+nickname+"&deptNo="+deptNo+"&stateAge="+stateAge+"&endAge="+endAge
+}
+
+</script>
+</head>
+<body>
+<div id="test" style="margin: 0 auto;width:100%;" align="center">
+			<!-- 欢迎 -->
+		<div style="margin: 0 auto;width:1000px;height:20px " align="center">
+				欢迎{{user.loginname}}!
+			<a href="/removeSession.action">退出</a>
+		</div>
+	
+		<div>
+		<form action="/book/delMore.action">
+			<table border="1" style="width:100%;">
+				<tr>
+					<th><input type="checkbox"  id="checkAll" >全选</th>
+					<th>图书封面</th>
+					<th>书名</th>
+					<th>作者</th>
+					<th>出版社</th>
+					<th>上架时间</th>
+					<th>价格</th>
+					<th >内容摘要</th>
+					<th>书籍类型</th>
+					<th>操作</th>
+				</tr>
+				<tr v-for="book in pages.datas">
+					<td><input type="checkbox" class="bids" name="ids" :value="book.bid"></td>
+					<td><a :href="'/detail.html?bid='+book.bid"><img :src="'/style/blue/images/'+book.image_b "></a></td>
+					<td><a :href="'/detail.html?bid='+book.bid">{{book.bname }}</a></td>
+					<td>{{book.author }}</td>
+					<td>{{book.press }}</td>
+					<td>{{book.publishtime|formatTime('yyyy-MM-dd')}}</td>
+					<td>{{book.currPrice }}</td>
+					<td >{{book.description }}</td>
+					<td >{{book.cname}}</td>
+					<td>
+						<a :href="'/queryAll.action?bid='+book.bid">修改</a>
+						<a :href="'/delMore.action?bids='+book.bid" >删除</a>
+					</td>
+				</tr>
+				<tr align="center">
+					 <td colspan="10"><input type="hidden" id="pageMax" :value="pages.totalPage">
+									<input type="button" value="批量删除"  id="delMore">
+									<input type="button" value="新增图书" id="addBook">
+				共{{pages.pageCount }}条数据 &nbsp; &nbsp; 每页<input type="text" size="1"
+					id="pageSize" :value="pages.pageSize" />条 第{{pages.pageIndex
+				}}页/共{{pages.pageMax}}页
+				<font v-if="pages.pageIndex>1">
+					<a href="javaScript:void(0)" v-on:click="sendData(1)">首页</a> 
+					<a href="javaScript:void(0)" v-on:click="sendData(pages.pageIndex-1)">上一页</a>
+				</font>
+				<font v-else="pages.pageIndex=<1">
+					<a href="javaScript:void(0)">第一页</a>
+				</font>
+				<font v-if="pages.pageIndex<pages.pageMax">
+					<a href="javaScript:void(0)" v-on:click="sendData(pages.pageIndex+1)">下一页</a>
+					<a href="javaScript:void(0)" v-on:click="sendData(pages.pageMax)">尾页</a>
+				</font>
+				<font v-else="pages.pageIndex>=pages.pageMax">
+					<a href="javaScript:void(0)">最后一页</a>
+				</font>
+				&nbsp; &nbsp; 跳转到<input type="text" size="1" id="pageNum" :value="pages.pageIndex">页 
+						<input type="button" size="1" value="go" id="jump">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+</body>
+<script src="http://localhost:8070/js/index.js"></script>
+
+</html>
